@@ -51,6 +51,7 @@ public class SessionServiceEndpoint extends BaseEndpoint {
     this.sessionService = sessionService;
   }
 
+
   @PostMapping(value = "/findAnyMatching")
   public ResponseEntity<ServiceResult> findAnyMatching(@RequestBody FindAnyMatchingQuery query) {
     String loggerPrefix = getLoggerPrefix("findAnyMatching");
