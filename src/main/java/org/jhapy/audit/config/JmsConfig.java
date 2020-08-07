@@ -18,22 +18,19 @@
 
 package org.jhapy.audit.config;
 
-import javax.jms.ConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jms.annotation.EnableJms;
-import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 
 /**
  * @author jHapy Lead Dev.
  * @version 1.0
  * @since 2019-07-02
  */
-@Configuration
-@EnableJms
+//@Configuration
+//@EnableJms
 public class JmsConfig {
-
+/*
   @Autowired
   ConnectionFactory connectionFactory;
 
@@ -44,4 +41,6 @@ public class JmsConfig {
     factory.setConcurrency("1-1");
     return factory;
   }
+
+ */
 }

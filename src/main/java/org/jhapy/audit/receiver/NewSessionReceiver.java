@@ -22,7 +22,7 @@ import org.jhapy.audit.exception.ServiceException;
 import org.jhapy.audit.service.SessionService;
 import org.jhapy.commons.utils.HasLogger;
 import org.jhapy.dto.messageQueue.NewSession;
-import org.springframework.jms.annotation.JmsListener;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.stereotype.Component;
@@ -41,7 +41,7 @@ public class NewSessionReceiver implements HasLogger {
     this.sessionService = sessionService;
   }
 
-  @JmsListener(destination = "newSession")
+  @RabbitListener(queues = "newSession")
   public void newSession(Message<NewSession> message) {
     String loggerPrefix = getLoggerPrefix("newSession");
     logger().info(loggerPrefix + "+++++++++++++++++++++++++++++++++++++++++++++++++++++");

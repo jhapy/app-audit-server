@@ -21,7 +21,7 @@ package org.jhapy.audit.receiver;
 import org.jhapy.audit.service.SessionService;
 import org.jhapy.commons.utils.HasLogger;
 import org.jhapy.dto.messageQueue.EndSession;
-import org.springframework.jms.annotation.JmsListener;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.stereotype.Component;
@@ -40,7 +40,7 @@ public class EndSessionReceiver implements HasLogger {
     this.sessionService = sessionService;
   }
 
-  @JmsListener(destination = "endSession")
+  @RabbitListener(queues = "endSession")
   public void endSession(Message<EndSession> message) {
     String loggerPrefix = getLoggerPrefix("endSession");
     logger().info(loggerPrefix + "+++++++++++++++++++++++++++++++++++++++++++++++++++++");
