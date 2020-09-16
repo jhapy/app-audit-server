@@ -18,10 +18,6 @@
 
 package org.jhapy.audit.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
 /**
  * @author jHapy Lead Dev.
  * @version 1.0
