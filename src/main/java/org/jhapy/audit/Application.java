@@ -17,6 +17,7 @@
  */
 package org.jhapy.audit;
 
+import com.github.cloudyrock.spring.v5.EnableMongock;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;
@@ -47,6 +48,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 @EnableConfigurationProperties(AppProperties.class)
 @EnableCircuitBreaker
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableMongock
 @ComponentScan({"org.jhapy.audit", "org.jhapy.commons"})
 public class Application implements InitializingBean {
 

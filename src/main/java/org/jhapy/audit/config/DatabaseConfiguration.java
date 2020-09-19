@@ -19,6 +19,7 @@
 package org.jhapy.audit.config;
 
 
+import com.github.cloudyrock.spring.v5.EnableMongock;
 import org.jhapy.commons.utils.HasLogger;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
