@@ -18,6 +18,8 @@
 
 package org.jhapy.audit.endpoint;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.jhapy.audit.domain.Session;
 import org.jhapy.audit.service.SessionService;
 import org.jhapy.commons.endpoint.BaseEndpoint;
@@ -40,7 +42,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2019-06-05
  */
 @RestController
-@RequestMapping("sessionService")
+@RequestMapping("/api/sessionService")
 public class SessionServiceEndpoint extends BaseEndpoint {
 
   private final SessionService sessionService;
@@ -51,7 +53,10 @@ public class SessionServiceEndpoint extends BaseEndpoint {
     this.sessionService = sessionService;
   }
 
-
+  @Operation(
+      security = @SecurityRequirement(name = "openId", scopes = {"ROLE_AUDIT_READ",
+          "ROLE_AUDIT_WRITE"})
+  )
   @PostMapping(value = "/findAnyMatching")
   public ResponseEntity<ServiceResult> findAnyMatching(@RequestBody FindAnyMatchingQuery query) {
     String loggerPrefix = getLoggerPrefix("findAnyMatching");
@@ -68,6 +73,10 @@ public class SessionServiceEndpoint extends BaseEndpoint {
     }
   }
 
+  @Operation(
+      security = @SecurityRequirement(name = "openId", scopes = {"ROLE_AUDIT_READ",
+          "ROLE_AUDIT_WRITE"})
+  )
   @PostMapping(value = "/countAnyMatching")
   public ResponseEntity<ServiceResult> countAnyMatching(@RequestBody CountAnyMatchingQuery query) {
     String loggerPrefix = getLoggerPrefix("countAnyMatching");
@@ -79,6 +88,10 @@ public class SessionServiceEndpoint extends BaseEndpoint {
     }
   }
 
+  @Operation(
+      security = @SecurityRequirement(name = "openId", scopes = {"ROLE_AUDIT_READ",
+          "ROLE_AUDIT_WRITE"})
+  )
   @PostMapping(value = "/getById")
   public ResponseEntity<ServiceResult> getById(@RequestBody GetByStrIdQuery query) {
     String loggerPrefix = getLoggerPrefix("getById");
