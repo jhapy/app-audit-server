@@ -41,10 +41,11 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
  */
 @Configuration
 @Import(value = MongoAutoConfiguration.class)
-@EntityScan("org.jhapy.audit.domain")
 @EnableMongoAuditing(auditorAwareRef = "springSecurityAuditorAware")
 @EnableMongoRepositories(basePackages = "org.jhapy.audit.repository")
+@EntityScan("org.jhapy.audit.domain")
 @EnableTransactionManagement
+@EnableMongock
 public class DatabaseConfiguration implements HasLogger {
 
   @Bean
