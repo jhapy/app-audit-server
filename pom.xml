@@ -26,9 +26,6 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-    <spring-boot.version>2.3.4.RELEASE</spring-boot.version>
-    <spring-boot-admin.version>2.2.3</spring-boot-admin.version>
-
     <docker-base-image-name>jhapy/base-image-slim:1.0</docker-base-image-name>
     <docker-target-image-name>jhapy/app-audit-server:v2</docker-target-image-name>
 
@@ -84,7 +81,7 @@
         </exclusion>
       </exclusions>
     </dependency>
-<dependency>
+    <dependency>
       <groupId>de.codecentric</groupId>
       <artifactId>spring-boot-admin-starter-client</artifactId>
       <version>${spring-boot-admin.version}</version>

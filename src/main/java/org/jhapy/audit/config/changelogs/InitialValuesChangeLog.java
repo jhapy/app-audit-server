@@ -30,7 +30,9 @@ public class InitialValuesChangeLog {
 
   @ChangeSet(order = "001", id = "createCollection", author = "jHapy Dev1")
   public void createCollection(MongoDatabase db) {
+    if (db.getCollection("session") == null) {
       db.createCollection("session");
+    }
   }
 
 }
