@@ -31,7 +31,6 @@ import org.jhapy.commons.utils.SpringProfileConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -59,7 +58,7 @@ public class Application implements InitializingBean {
 
   private final Environment env;
 
-  private AppProperties appProperties;
+  private final AppProperties appProperties;
 
   public Application(Environment env, AppProperties appProperties) {
     this.env = env;
