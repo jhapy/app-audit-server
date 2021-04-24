@@ -49,7 +49,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableConfigurationProperties(AppProperties.class)
-@EnableCircuitBreaker
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableMongock
 @ComponentScan({"org.jhapy.audit", "org.jhapy.commons"})
