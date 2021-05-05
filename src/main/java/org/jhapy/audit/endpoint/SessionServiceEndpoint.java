@@ -59,7 +59,7 @@ public class SessionServiceEndpoint extends BaseEndpoint {
   )
   @PostMapping(value = "/findAnyMatching")
   public ResponseEntity<ServiceResult> findAnyMatching(@RequestBody FindAnyMatchingQuery query) {
-    String loggerPrefix = getLoggerPrefix("findAnyMatching");
+    var loggerPrefix = getLoggerPrefix("findAnyMatching");
     try {
       Page<Session> result = sessionService
           .findAnyMatching(query.getFilter(),
@@ -79,7 +79,7 @@ public class SessionServiceEndpoint extends BaseEndpoint {
   )
   @PostMapping(value = "/countAnyMatching")
   public ResponseEntity<ServiceResult> countAnyMatching(@RequestBody CountAnyMatchingQuery query) {
-    String loggerPrefix = getLoggerPrefix("countAnyMatching");
+    var loggerPrefix = getLoggerPrefix("countAnyMatching");
     try {
       return handleResult(loggerPrefix, sessionService
           .countAnyMatching(query.getFilter()));
@@ -94,7 +94,7 @@ public class SessionServiceEndpoint extends BaseEndpoint {
   )
   @PostMapping(value = "/getById")
   public ResponseEntity<ServiceResult> getById(@RequestBody GetByStrIdQuery query) {
-    String loggerPrefix = getLoggerPrefix("getById");
+    var loggerPrefix = getLoggerPrefix("getById");
     try {
       return handleResult(loggerPrefix, mapperFacade.map(sessionService
           .load(query.getId()), Session.class, getOrikaContext(query)));

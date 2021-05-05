@@ -41,9 +41,9 @@ public class NewSessionReceiver implements HasLogger {
     this.sessionService = sessionService;
   }
 
-    @RabbitListener(queues = "#{newSessionQueue.name}")
+  @RabbitListener(queues = "#{newSessionQueue.name}")
   public void newSession(Message<NewSession> message) {
-    String loggerPrefix = getLoggerPrefix("newSession");
+    var loggerPrefix = getLoggerPrefix("newSession");
     logger().info(loggerPrefix + "+++++++++++++++++++++++++++++++++++++++++++++++++++++");
     MessageHeaders headers = message.getHeaders();
     logger().info(loggerPrefix + "Headers received : " + headers);

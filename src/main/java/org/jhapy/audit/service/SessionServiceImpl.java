@@ -48,7 +48,7 @@ public class SessionServiceImpl implements SessionService, HasLogger {
 
   @Override
   public Page<Session> findAnyMatching(String filter, Pageable pageable) {
-    String loggerString = getLoggerPrefix("findAnyMatching");
+    var loggerString = getLoggerPrefix("findAnyMatching");
     logger().debug(loggerString + "In = " + filter);
     Page<Session> result;
 
@@ -66,7 +66,7 @@ public class SessionServiceImpl implements SessionService, HasLogger {
 
   @Override
   public long countAnyMatching(String filter) {
-    String loggerString = getLoggerPrefix("countAnyMatching");
+    var loggerString = getLoggerPrefix("countAnyMatching");
     logger().debug(loggerString + "In = " + filter);
     long result;
     if (StringUtils.isNotBlank(filter)) {
@@ -83,7 +83,7 @@ public class SessionServiceImpl implements SessionService, HasLogger {
   @Override
   public Session login(String jsessionId, String sourceIp, String username, Boolean isSuccess,
       String error) throws ServiceException {
-    String loggerPrefix = getLoggerPrefix("login");
+    var loggerPrefix = getLoggerPrefix("login");
     Optional<Session> _session = sessionRepository.getByJsessionId(jsessionId);
     Session session;
     if (_session.isPresent()) {
@@ -110,7 +110,7 @@ public class SessionServiceImpl implements SessionService, HasLogger {
   @Transactional
   @Override
   public void logout(String jsessionId) {
-    String loggerPrefix = getLoggerPrefix("logout");
+    var loggerPrefix = getLoggerPrefix("logout");
     Optional<Session> _session = sessionRepository.getByJsessionId(jsessionId);
     if (_session.isPresent()) {
       Session session = _session.get();

@@ -31,11 +31,9 @@ import org.jhapy.commons.utils.SpringProfileConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
@@ -58,7 +56,7 @@ public class Application implements InitializingBean {
 
   private final Environment env;
 
-  private AppProperties appProperties;
+  private final AppProperties appProperties;
 
   public Application(Environment env, AppProperties appProperties) {
     this.env = env;
@@ -88,11 +86,14 @@ public class Application implements InitializingBean {
     } catch (UnknownHostException e) {
       logger.warn("The host name could not be determined, using `localhost` as fallback");
     }
-    logger.info("\n----------------------------------------------------------\n\t" +
-            "Application '{}' is running! Access URLs:\n\t" +
-            "Local: \t\t{}://localhost:{}{}\n\t" +
-            "External: \t{}://{}:{}{}\n\t" +
-            "Profile(s): \t{}\n----------------------------------------------------------",
+    logger.info("""
+
+            ----------------------------------------------------------
+            \tApplication '{}' is running! Access URLs:
+            \tLocal: \t\t{}://localhost:{}{}
+            \tExternal: \t{}://{}:{}{}
+            \tProfile(s): \t{}
+            ----------------------------------------------------------""",
         env.getProperty("spring.application.name"),
         protocol,
         serverPort,
@@ -107,8 +108,11 @@ public class Application implements InitializingBean {
     if (configServerStatus == null) {
       configServerStatus = "Not found or not setup for this application";
     }
-    logger.info("\n----------------------------------------------------------\n\t" +
-            "Config Server: \t{}\n----------------------------------------------------------",
+    logger.info("""
+
+            ----------------------------------------------------------
+            \tConfig Server: \t{}
+            ----------------------------------------------------------""",
         configServerStatus);
   }
 

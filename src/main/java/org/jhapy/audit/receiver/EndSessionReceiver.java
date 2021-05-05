@@ -40,9 +40,9 @@ public class EndSessionReceiver implements HasLogger {
     this.sessionService = sessionService;
   }
 
-    @RabbitListener(queues = "#{endSessionQueue.name}")
+  @RabbitListener(queues = "#{endSessionQueue.name}")
   public void endSession(Message<EndSession> message) {
-    String loggerPrefix = getLoggerPrefix("endSession");
+    var loggerPrefix = getLoggerPrefix("endSession");
     logger().info(loggerPrefix + "+++++++++++++++++++++++++++++++++++++++++++++++++++++");
     MessageHeaders headers = message.getHeaders();
     logger().info(loggerPrefix + "Headers received : " + headers);
