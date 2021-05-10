@@ -18,8 +18,8 @@
 
 package org.jhapy.audit.receiver;
 
-import org.jhapy.audit.exception.ServiceException;
 import org.jhapy.audit.service.SessionService;
+import org.jhapy.commons.exception.ServiceException;
 import org.jhapy.commons.utils.HasLogger;
 import org.jhapy.dto.messageQueue.NewSession;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -55,7 +55,7 @@ public class NewSessionReceiver implements HasLogger {
           .login(newSession.getJsessionId(), newSession.getSourceIp(), newSession.getUsername(),
               newSession.getIsSuccess(), newSession.getError());
     } catch (ServiceException e) {
-      logger().error(loggerPrefix + "Something wrong happend : " + e.getLocalizedMessage(), e);
+      logger().error(loggerPrefix + "Something wrong happened : " + e.getLocalizedMessage(), e);
     }
 
     logger().info(loggerPrefix + "Message content received : " + newSession);

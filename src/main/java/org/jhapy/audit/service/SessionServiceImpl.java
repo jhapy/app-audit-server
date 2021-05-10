@@ -22,8 +22,8 @@ import java.time.Instant;
 import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.jhapy.audit.domain.Session;
-import org.jhapy.audit.exception.ServiceException;
 import org.jhapy.audit.repository.SessionRepository;
+import org.jhapy.commons.exception.ServiceException;
 import org.jhapy.commons.utils.HasLogger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -92,7 +92,7 @@ public class SessionServiceImpl implements SessionService, HasLogger {
         logger().error(loggerPrefix + "SESSION ID '" + jsessionId
             + "' is already associated with another user '" + session.getUsername()
             + "', expecting '" + username + "'");
-        throw new ServiceException("SESSION ID is already associated with another user");
+        throw new ServiceException("SESSION ID is already associated with another user", "SessionService");
       }
       return session;
     } else {

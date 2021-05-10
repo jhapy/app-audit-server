@@ -19,7 +19,7 @@
 package org.jhapy.audit.service;
 
 import org.jhapy.audit.domain.Session;
-import org.jhapy.audit.exception.ServiceException;
+import org.jhapy.commons.exception.ServiceException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
