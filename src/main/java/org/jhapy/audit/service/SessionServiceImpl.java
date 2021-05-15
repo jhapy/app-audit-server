@@ -92,7 +92,8 @@ public class SessionServiceImpl implements SessionService, HasLogger {
         logger().error(loggerPrefix + "SESSION ID '" + jsessionId
             + "' is already associated with another user '" + session.getUsername()
             + "', expecting '" + username + "'");
-        throw new ServiceException("SESSION ID is already associated with another user", "SessionService");
+        throw new ServiceException("SESSION ID is already associated with another user",
+            "SessionService");
       }
       return session;
     } else {

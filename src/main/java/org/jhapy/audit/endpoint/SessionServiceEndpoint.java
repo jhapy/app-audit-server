@@ -61,13 +61,13 @@ public class SessionServiceEndpoint extends BaseEndpoint {
   public ResponseEntity<ServiceResult> findAnyMatching(@RequestBody FindAnyMatchingQuery query) {
     var loggerPrefix = getLoggerPrefix("findAnyMatching");
 
-      Page<Session> result = sessionService
-          .findAnyMatching(query.getFilter(),
-              mapperFacade.map(query.getPageable(),
-                  Pageable.class, getOrikaContext(query)));
-      org.jhapy.dto.utils.Page<Session> convertedResult = new org.jhapy.dto.utils.Page<>();
-      mapperFacade.map(result, convertedResult, getOrikaContext(query));
-      return handleResult(loggerPrefix, convertedResult);
+    Page<Session> result = sessionService
+        .findAnyMatching(query.getFilter(),
+            mapperFacade.map(query.getPageable(),
+                Pageable.class, getOrikaContext(query)));
+    org.jhapy.dto.utils.Page<Session> convertedResult = new org.jhapy.dto.utils.Page<>();
+    mapperFacade.map(result, convertedResult, getOrikaContext(query));
+    return handleResult(loggerPrefix, convertedResult);
   }
 
   @Operation(
@@ -78,8 +78,8 @@ public class SessionServiceEndpoint extends BaseEndpoint {
   public ResponseEntity<ServiceResult> countAnyMatching(@RequestBody CountAnyMatchingQuery query) {
     var loggerPrefix = getLoggerPrefix("countAnyMatching");
 
-      return handleResult(loggerPrefix, sessionService
-          .countAnyMatching(query.getFilter()));
+    return handleResult(loggerPrefix, sessionService
+        .countAnyMatching(query.getFilter()));
   }
 
   @Operation(
@@ -90,7 +90,7 @@ public class SessionServiceEndpoint extends BaseEndpoint {
   public ResponseEntity<ServiceResult> getById(@RequestBody GetByStrIdQuery query) {
     var loggerPrefix = getLoggerPrefix("getById");
 
-      return handleResult(loggerPrefix, mapperFacade.map(sessionService
-          .load(query.getId()), Session.class, getOrikaContext(query)));
+    return handleResult(loggerPrefix, mapperFacade.map(sessionService
+        .load(query.getId()), Session.class, getOrikaContext(query)));
   }
 }
