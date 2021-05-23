@@ -20,16 +20,15 @@ package org.jhapy.audit.endpoint;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.jhapy.audit.converter.SessionConverterV2;
 import org.jhapy.audit.domain.Session;
 import org.jhapy.audit.service.SessionService;
 import org.jhapy.commons.endpoint.BaseEndpoint;
-import org.jhapy.commons.utils.OrikaBeanMapper;
 import org.jhapy.dto.serviceQuery.ServiceResult;
 import org.jhapy.dto.serviceQuery.generic.CountAnyMatchingQuery;
 import org.jhapy.dto.serviceQuery.generic.FindAnyMatchingQuery;
 import org.jhapy.dto.serviceQuery.generic.GetByStrIdQuery;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -48,9 +47,13 @@ public class SessionServiceEndpoint extends BaseEndpoint {
   private final SessionService sessionService;
 
   public SessionServiceEndpoint(SessionService sessionService,
-      OrikaBeanMapper mapperFacade) {
-    super(mapperFacade);
+      SessionConverterV2 converter) {
+    super(converter);
     this.sessionService = sessionService;
+  }
+
+  protected SessionConverterV2 getConverter() {
+    return (SessionConverterV2) converter;
   }
 
   @Operation(
@@ -63,11 +66,9 @@ public class SessionServiceEndpoint extends BaseEndpoint {
 
     Page<Session> result = sessionService
         .findAnyMatching(query.getFilter(),
-            mapperFacade.map(query.getPageable(),
-                Pageable.class, getOrikaContext(query)));
-    org.jhapy.dto.utils.Page<Session> convertedResult = new org.jhapy.dto.utils.Page<>();
-    mapperFacade.map(result, convertedResult, getOrikaContext(query));
-    return handleResult(loggerPrefix, convertedResult);
+            converter.convert(query.getPageable()));
+    return handleResult(loggerPrefix,
+        toDtoPage(result, getConverter().convertToDtoSessions(result.getContent())));
   }
 
   @Operation(
@@ -78,8 +79,7 @@ public class SessionServiceEndpoint extends BaseEndpoint {
   public ResponseEntity<ServiceResult> countAnyMatching(@RequestBody CountAnyMatchingQuery query) {
     var loggerPrefix = getLoggerPrefix("countAnyMatching");
 
-    return handleResult(loggerPrefix, sessionService
-        .countAnyMatching(query.getFilter()));
+    return handleResult(loggerPrefix, sessionService.countAnyMatching(query.getFilter()));
   }
 
   @Operation(
@@ -90,7 +90,7 @@ public class SessionServiceEndpoint extends BaseEndpoint {
   public ResponseEntity<ServiceResult> getById(@RequestBody GetByStrIdQuery query) {
     var loggerPrefix = getLoggerPrefix("getById");
 
-    return handleResult(loggerPrefix, mapperFacade.map(sessionService
-        .load(query.getId()), Session.class, getOrikaContext(query)));
+    return handleResult(loggerPrefix,
+        getConverter().convertToDto(sessionService.load(query.getId())));
   }
 }

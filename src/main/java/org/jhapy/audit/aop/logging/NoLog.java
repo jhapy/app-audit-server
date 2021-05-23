@@ -16,30 +16,12 @@
  * limitations under the License.
  */
 
-package org.jhapy.audit.converter;
+package org.jhapy.audit.aop.logging;
 
-import org.jhapy.commons.utils.OrikaBeanMapper;
-import org.jhapy.dto.domain.audit.Session;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Target;
 
-/**
- * @author jHapy Lead Dev.
- * @version 1.0
- * @since 2019-06-05
- */
-@Component
-public class SessionConverter {
+@Target(ElementType.METHOD)
+public @interface NoLog {
 
-  private final OrikaBeanMapper orikaBeanMapper;
-
-  public SessionConverter(OrikaBeanMapper orikaBeanMapper) {
-    this.orikaBeanMapper = orikaBeanMapper;
-  }
-
-  @Bean
-  public void utilsConverters() {
-    orikaBeanMapper.addMapper(org.jhapy.audit.domain.Session.class, Session.class);
-    orikaBeanMapper.addMapper(Session.class, org.jhapy.audit.domain.Session.class);
-  }
 }
