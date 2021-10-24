@@ -18,8 +18,6 @@
 
 package org.jhapy.audit.service;
 
-import java.time.Instant;
-import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.jhapy.audit.domain.Session;
 import org.jhapy.audit.repository.SessionRepository;
@@ -30,6 +28,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.Instant;
+import java.util.Optional;
+import java.util.UUID;
 
 /**
  * @author jHapy Lead Dev.
@@ -63,7 +65,6 @@ public class SessionServiceImpl implements SessionService, HasLogger {
     return result;
   }
 
-
   @Override
   public long countAnyMatching(String filter) {
     var loggerString = getLoggerPrefix("countAnyMatching");
@@ -81,19 +82,27 @@ public class SessionServiceImpl implements SessionService, HasLogger {
 
   @Transactional
   @Override
-  public Session login(String jsessionId, String sourceIp, String username, Boolean isSuccess,
-      String error) throws ServiceException {
+  public Session login(
+      String jsessionId, String sourceIp, String username, Boolean isSuccess, String error)
+      throws ServiceException {
     var loggerPrefix = getLoggerPrefix("login");
     Optional<Session> _session = sessionRepository.getByJsessionId(jsessionId);
     Session session;
     if (_session.isPresent()) {
       session = _session.get();
       if (!session.getUsername().equals(username)) {
-        logger().error(loggerPrefix + "SESSION ID '" + jsessionId
-            + "' is already associated with another user '" + session.getUsername()
-            + "', expecting '" + username + "'");
-        throw new ServiceException("SESSION ID is already associated with another user",
-            "SessionService");
+        logger()
+            .error(
+                loggerPrefix
+                    + "SESSION ID '"
+                    + jsessionId
+                    + "' is already associated with another user '"
+                    + session.getUsername()
+                    + "', expecting '"
+                    + username
+                    + "'");
+        throw new ServiceException(
+            "SESSION ID is already associated with another user", "SessionService");
       }
       return session;
     } else {
@@ -120,13 +129,14 @@ public class SessionServiceImpl implements SessionService, HasLogger {
           session.getSessionEnd().toEpochMilli() - session.getSessionStart().toEpochMilli());
       sessionRepository.save(session);
     } else {
-      logger().error(
-          String.format("%sSession with jsessionId '%s' not found", loggerPrefix, jsessionId));
+      logger()
+          .error(
+              String.format("%sSession with jsessionId '%s' not found", loggerPrefix, jsessionId));
     }
   }
 
   @Override
-  public MongoRepository<Session, String> getRepository() {
+  public MongoRepository<Session, UUID> getRepository() {
     return sessionRepository;
   }
 }
