@@ -15,34 +15,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.jhapy.audit.domain
 
-package org.jhapy.audit.domain;
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.index.Indexed
+import org.springframework.data.mongodb.core.mapping.Document
+import java.time.Instant
 
 /**
  * @author jHapy Lead Dev.
  * @version 1.0
  * @since 2019-05-24
  */
-@Document(collection = "changelog")
-@Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-public class ChangeLog extends BaseEntity {
+@Document(collection = "session")
+class Session : BaseEntity() {
+    var username: String? = null
+    var sourceIp: String? = null
+    var sessionStart: Instant? = null
+    var sessionEnd: Instant? = null
+    var sessionDuration: Long? = null
+    var isSuccess: Boolean? = null
+    var error: String? = null
 
-  private String entity;
-
-  private Long recordId;
-
-  private Session session;
-
-  private String attribute;
-
-  private String oldValue;
-
-  private String newValue;
+    @Indexed(unique = true)
+    var jsessionId: String? = null
 }

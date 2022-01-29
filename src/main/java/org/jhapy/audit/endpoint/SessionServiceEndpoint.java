@@ -18,20 +18,10 @@
 
 package org.jhapy.audit.endpoint;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import org.jhapy.audit.converter.SessionConverterV2;
+import org.axonframework.commandhandling.gateway.CommandGateway;
+import org.axonframework.queryhandling.QueryGateway;
 import org.jhapy.audit.domain.Session;
-import org.jhapy.audit.service.SessionService;
-import org.jhapy.commons.endpoint.BaseEndpoint;
-import org.jhapy.dto.serviceQuery.ServiceResult;
-import org.jhapy.dto.serviceQuery.generic.CountAnyMatchingQuery;
-import org.jhapy.dto.serviceQuery.generic.FindAnyMatchingQuery;
-import org.jhapy.dto.serviceQuery.generic.GetByIdQuery;
-import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.jhapy.dto.domain.audit.SessionDTO;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -42,56 +32,9 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/sessionService")
-public class SessionServiceEndpoint extends BaseEndpoint {
+public class SessionServiceEndpoint extends BaseEndpoint<Session, SessionDTO> {
 
-  private final SessionService sessionService;
-
-  public SessionServiceEndpoint(SessionService sessionService, SessionConverterV2 converter) {
-    super(converter);
-    this.sessionService = sessionService;
-  }
-
-  protected SessionConverterV2 getConverter() {
-    return (SessionConverterV2) converter;
-  }
-
-  @Operation(
-      security =
-          @SecurityRequirement(
-              name = "openId",
-              scopes = {"ROLE_AUDIT_READ", "ROLE_AUDIT_WRITE"}))
-  @PostMapping(value = "/findAnyMatching")
-  public ResponseEntity<ServiceResult> findAnyMatching(@RequestBody FindAnyMatchingQuery query) {
-    var loggerPrefix = getLoggerPrefix("findAnyMatching");
-
-    Page<Session> result =
-        sessionService.findAnyMatching(query.getFilter(), converter.convert(query.getPageable()));
-    return handleResult(
-        loggerPrefix, toDtoPage(result, getConverter().convertToDtoSessions(result.getContent())));
-  }
-
-  @Operation(
-      security =
-          @SecurityRequirement(
-              name = "openId",
-              scopes = {"ROLE_AUDIT_READ", "ROLE_AUDIT_WRITE"}))
-  @PostMapping(value = "/countAnyMatching")
-  public ResponseEntity<ServiceResult> countAnyMatching(@RequestBody CountAnyMatchingQuery query) {
-    var loggerPrefix = getLoggerPrefix("countAnyMatching");
-
-    return handleResult(loggerPrefix, sessionService.countAnyMatching(query.getFilter()));
-  }
-
-  @Operation(
-      security =
-          @SecurityRequirement(
-              name = "openId",
-              scopes = {"ROLE_AUDIT_READ", "ROLE_AUDIT_WRITE"}))
-  @PostMapping(value = "/getById")
-  public ResponseEntity<ServiceResult> getById(@RequestBody GetByIdQuery query) {
-    var loggerPrefix = getLoggerPrefix("getById");
-
-    return handleResult(
-        loggerPrefix, getConverter().convertToDto(sessionService.load(query.getId())));
+  public SessionServiceEndpoint(CommandGateway commandGateway, QueryGateway queryGateway) {
+    super(commandGateway, queryGateway);
   }
 }

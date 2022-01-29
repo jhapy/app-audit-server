@@ -32,12 +32,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
-import org.springframework.security.oauth2.core.OAuth2TokenValidator;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.JwtDecoders;
-import org.springframework.security.oauth2.jwt.JwtValidators;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.jwt.*;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
@@ -47,11 +42,11 @@ import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 @Import(SecurityProblemSupport.class)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-  @Value("${spring.security.oauth2.client.provider.oidc.issuer-uri}")
-  private String issuerUri;
-
   private final AppProperties appProperties;
   private final SecurityProblemSupport problemSupport;
+
+  @Value("${spring.security.oauth2.client.provider.oidc.issuer-uri}")
+  private String issuerUri;
 
   public SecurityConfiguration(AppProperties appProperties, SecurityProblemSupport problemSupport) {
     this.problemSupport = problemSupport;
@@ -71,7 +66,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .and()
         .headers()
         .contentSecurityPolicy(
-            "default-src 'self' " + appProperties.getKeycloakAdmin().getServerUrl()
+            "default-src 'self' "
+                + appProperties.getKeycloakAdmin().getServerUrl()
                 + "; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:")
         .and()
         .referrerPolicy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
@@ -86,13 +82,20 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
         .authorizeRequests()
-        .antMatchers("/api/auth-info").permitAll()
-        .antMatchers("/api/**").authenticated()
-        .antMatchers("/management/health").permitAll()
-        .antMatchers("/management/health/**").permitAll()
-        .antMatchers("/management/info").permitAll()
-        .antMatchers("/management/prometheus").permitAll()
-        .antMatchers("/management/**").hasAuthority("ROLE_ADMIN")
+        .antMatchers("/api/auth-info")
+        .permitAll()
+        .antMatchers("/api/**")
+        .authenticated()
+        .antMatchers("/management/health")
+        .permitAll()
+        .antMatchers("/management/health/**")
+        .permitAll()
+        .antMatchers("/management/info")
+        .permitAll()
+        .antMatchers("/management/prometheus")
+        .permitAll()
+        .antMatchers("/management/**")
+        .hasAuthority("ROLE_ADMIN")
         .and()
         .oauth2ResourceServer()
         .jwt()
@@ -104,21 +107,20 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
   }
 
   Converter<Jwt, AbstractAuthenticationToken> authenticationConverter() {
-    JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
-    jwtAuthenticationConverter
-        .setJwtGrantedAuthoritiesConverter(new JwtGrantedAuthorityConverter());
+    var jwtAuthenticationConverter = new JwtAuthenticationConverter();
+    jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(
+        new JwtGrantedAuthorityConverter());
     return jwtAuthenticationConverter;
   }
 
   @Bean
   JwtDecoder jwtDecoder() {
-    NimbusJwtDecoder jwtDecoder = JwtDecoders.fromOidcIssuerLocation(issuerUri);
+    var jwtDecoder = (NimbusJwtDecoder) JwtDecoders.fromOidcIssuerLocation(issuerUri);
 
-    OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(
-        appProperties.getSecurity().getOauth2().getAudience());
-    OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuerUri);
-    OAuth2TokenValidator<Jwt> withAudience = new DelegatingOAuth2TokenValidator<>(withIssuer,
-        audienceValidator);
+    var audienceValidator =
+        new AudienceValidator(appProperties.getSecurity().getOauth2().getAudience());
+    var withIssuer = JwtValidators.createDefaultWithIssuer(issuerUri);
+    var withAudience = new DelegatingOAuth2TokenValidator<>(withIssuer, audienceValidator);
 
     jwtDecoder.setJwtValidator(withAudience);
 

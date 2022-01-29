@@ -18,20 +18,30 @@
 
 package org.jhapy.audit.config.changelogs;
 
-import com.github.cloudyrock.mongock.ChangeLog;
-import com.github.cloudyrock.mongock.ChangeSet;
-import com.github.cloudyrock.mongock.driver.mongodb.springdata.v3.decorator.impl.MongockTemplate;
+import io.mongock.api.annotations.*;
+import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.jhapy.audit.domain.Session;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
-@ChangeLog
+@ChangeUnit(order = "001", id = "initialValuesChangeLog", author = "jHapy Dev1")
 public class InitialValuesChangeLog {
+  @BeforeExecution
+  public void beforeExecution(MongoTemplate mongoTemplate) {
 
-  @ChangeSet(order = "001", id = "createCollection", author = "jHapy Dev1")
-  public void createCollection(MongockTemplate mongoTemplate) {
-    if (!mongoTemplate.collectionExists("session")) {
-      mongoTemplate.createCollection(Session.class);
-    }
+    mongoTemplate.createCollection(Session.class);
   }
+
+  @RollbackBeforeExecution
+  public void rollbackBeforeExecution(MongoTemplate mongoTemplate) {
+
+    mongoTemplate.dropCollection(Session.class);
+  }
+
+  @Execution
+  public void execution(CommandGateway commandGateway) {}
+
+  @RollbackExecution
+  public void rollbackExecution(CommandGateway commandGateway) {}
 }
